@@ -3,7 +3,7 @@
         <v-data-table
         :headers="headers"
         :items="temperatures"
-        :items-per-page="15"
+        :items-per-page="10"
         class="elevation-1"
     ></v-data-table>
     <v-btn block @click="loadDataFromServer" > Reload data </v-btn>

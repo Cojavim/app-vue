@@ -1,6 +1,16 @@
 <template>
     <div id="chart">
-        <v-container fluid>
+        <v-sheet v-if="!loaded"
+            :color="`grey ${theme.isDark ? 'darken-2' : 'lighten-4'}`"
+            class="pa-1"
+            >
+            <v-skeleton-loader
+                class="mx-auto"
+                max-width="auto"
+                type="card"
+                ></v-skeleton-loader>
+        </v-sheet>
+        <v-container v-else fluid>
             <v-sparkline
             :value="temps"
             :labels="hours"
@@ -33,6 +43,7 @@
         },
         methods: {
             async loadDataFromServer(){
+                this.loaded = false;
                 const response = await fetch("https://localhost:5001/WeatherForecast/temperatures")
                 let lStringified = JSON.stringify(await response.json());
                 this.temperatures = JSON.parse(lStringified)
@@ -44,18 +55,26 @@
                     this.temps.push(element.temperature)
                     this.hours.push(element.hour)
                 });
+                setTimeout(() => { this.loaded = true; }, 5000);
+                
             }
         },
+        inject: {
+            theme: {
+                default: { isDark: false },
+            },
+        },
         data: () => ({
-        lineCap: 'round',
-        gradientDirection: 'top',
-        gradient: gradients[5],
-        value: [0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0],
-        labels:[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-        temps: [],
-        hours: [],
-        gradients,
-        temperatures: []
+            loaded: false,
+            lineCap: 'round',
+            gradientDirection: 'top',
+            gradient: gradients[5],
+            value: [0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0],
+            labels:[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+            temps: [],
+            hours: [],
+            gradients,
+            temperatures: []
         })
     }
 </script>
