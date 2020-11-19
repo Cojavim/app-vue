@@ -15,8 +15,9 @@ export default {
   },
   methods: {
     async loadDataFromServer(){
-          const response = await fetch("http://localhost:5000/WeatherForecast/temperatures")
+          const response = await fetch("https://localhost:5001/WeatherForecast/temperatures")
           console.log(await response.json())
+          console.log(await response)
       }
   },
 };

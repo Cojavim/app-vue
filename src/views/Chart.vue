@@ -2,15 +2,17 @@
     <div id="chart">
         <v-container fluid>
             <v-sparkline
-            :value="value"
-            :gradient="gradient"
-            :smooth="radius || false"
-            :padding="padding"
-            :line-width="width"
+            :value="temps"
+            :labels="hours"
+            :gradient="gradients[5]"
+            :smooth="10 || false"
+            :padding="8"
+            :line-width="2"
             :stroke-linecap="lineCap"
             :gradient-direction="gradientDirection"
             auto-draw
             ></v-sparkline>
+            <v-btn block @click="loadDataFromServer" > Reload data </v-btn>
         </v-container>
     </div>
 </template>
@@ -26,15 +28,34 @@
     ]
 
     export default {
+        mounted: async function(){
+            this.loadDataFromServer();
+        },
+        methods: {
+            async loadDataFromServer(){
+                const response = await fetch("https://localhost:5001/WeatherForecast/temperatures")
+                let lStringified = JSON.stringify(await response.json());
+                this.temperatures = JSON.parse(lStringified)
+                // console.log(await response.json())
+                console.log(this.temperatures)
+                this.temps = [],
+                this.hours = [],
+                this.temperatures.forEach(element => {
+                    this.temps.push(element.temperature)
+                    this.hours.push(element.hour)
+                });
+            }
+        },
         data: () => ({
-        width: 2,
-        radius: 10,
-        padding: 8,
         lineCap: 'round',
+        gradientDirection: 'top',
         gradient: gradients[5],
         value: [0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0],
-        gradientDirection: 'top',
-        gradients
+        labels:[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+        temps: [],
+        hours: [],
+        gradients,
+        temperatures: []
         })
     }
 </script>
