@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import page404 from '../views/404.vue'
+
+import { Home, NotFound } from "../views";
 
 Vue.use(VueRouter)
 
@@ -23,7 +23,7 @@ const routes = [
   {
     path: '/404',
     name: '404',
-    component: page404
+    component: NotFound
   },
   {
     path: '/table',
@@ -34,12 +34,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Table.vue')
   },
   {
-    path: '/chart',
+    path: 'admin/chart/:test?',
     name: 'Chart',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/Chart.vue')
+    component: () => import(/* webpackChunkName: "chart" */ '../views/Chart.vue')
+  },
+  {
+    path: '*',
+    component: NotFound
   },
 ]
 
