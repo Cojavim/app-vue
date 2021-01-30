@@ -1,4 +1,4 @@
-# app-vue
+# app-vue MiniMinistry
 
 ## Project setup
 ```
